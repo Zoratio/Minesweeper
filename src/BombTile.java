@@ -1,2 +1,6 @@
-public class BombTile extends Tile {
+public class BombTile implements Tile {
+    @Override
+    public void Reveal() {
+
+    }
 }
