@@ -1,19 +1,13 @@
-public class NumberTile implements Tile {
-    private int Value;  //how many bombs are touching the tile
-    private boolean Revealed;   //default is false
-    public NumberTile(){
-        Value = 0;
-    }
-
-    public void SetValue(int Value){
-        this.Value = Value;
-    }
-    public int GetValue(){
-        return Value;
-    }
+public class NumberTile extends Tile {
 
     @Override
     public void Reveal() {
+        revealed = true;
+        ResultOfReveal();
+    }
 
+    @Override
+    void ResultOfReveal() {
+        // check to see if there are any places that is definitely clear, so they get revealed automatically
     }
 }
