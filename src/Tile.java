@@ -6,6 +6,6 @@ abstract class Tile {
     }
     String GetValue(){ return value; };
     boolean GetRevealed(){ return revealed; }
-    abstract void Reveal();
-    abstract void ResultOfReveal();
+    abstract void Reveal(Map game, int[] pos);
+    abstract void ResultOfReveal(Map game, int[] pos);
 }

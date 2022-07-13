@@ -1,13 +1,13 @@
 public class BombTile extends Tile {
 
     @Override
-    public void Reveal() {
+    public void Reveal(Map game, int[] pos) {
         revealed = true;
-        ResultOfReveal();
+        ResultOfReveal(game, pos);
     }
 
     @Override
-    void ResultOfReveal() {
+    void ResultOfReveal(Map game, int[] pos) {
         //show solution, lost game
     }
 }

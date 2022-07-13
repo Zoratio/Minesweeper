@@ -2,9 +2,16 @@ import java.util.Scanner;
 
 public class ScannerInputs {
     static private Scanner myScanner = new Scanner(System.in);
-    static public void CheckRange(){
+    static public int CheckRange(){
+        System.out.print("Please input the size of the grid:");
+        int size = Integer.parseInt((myScanner.nextLine()));
+        return size;
     }
-    static public void CheckDifficulty(){
+    static public int CheckDifficulty(int size){
+        System.out.println("Please pick the difficulty number you want:\n - 1: Easy\n - 2: Medium\n - 3: Hard");
+        int difficulty = Integer.parseInt((myScanner.nextLine()));
+        int bombCount = size * difficulty / 2;
+        return bombCount;
     }
     static public int[] CheckInput(int[] pos){
         System.out.print("Please input the row coordinates of your next input:");
