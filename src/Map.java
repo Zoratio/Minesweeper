@@ -1,25 +1,25 @@
 import java.util.Random;
 /*
 ToDo
-- On game start, player selects a tile, this tile will not be a bomb or have any bombs touching
-- Fill in the spaces that are definitely clear (0s)
+- Input a reveal or flag
 - Input validation
 */
 
 public class Map {
     public static final String ANSI_RESET = "\u001B[0m";
     public static final String ANSI_BLUE = "\u001B[34m";
-    public static final String ANSI_GREEN = "\u001B[32";
+    public static final String ANSI_GREEN = "\u001B[32m";
     public static final String ANSI_RED = "\u001B[31m";
     public static final String ANSI_YELLOW = "\u001B[33m";
     public static final String ANSI_CYAN = "\u001B[36m";
     public static final String ANSI_MAGENTA = "\u001B[35m";
     public static final String ANSI_BLACK = "\u001B[30m";
 
-    private Tile[][] grid;
-    private int size;
-    private enum gameState {INCOMPLETE, COMPLETE, FAILED}
-    private gameState state = gameState.INCOMPLETE;
+    final private Tile[][] grid;
+    final private int size;
+
+    public enum gameState {INCOMPLETE, COMPLETE, FAILED}
+    public gameState state = gameState.INCOMPLETE;
 
     public Map() {
         System.out.println("Welcome to Minesweeper");
@@ -30,28 +30,33 @@ public class Map {
                 grid[i][j] = new NumberTile();
             }
         }
-        //pickStartingTile();
-        placeBombs();
-        buildGrid();
-        displayGrid();
+        pickStartingTile();
+
         gameLoop();
     }
 
-    private void pickStartingTile() {   //CURRENLTY WORKING ON THIS. WILL NEED TO CHANGE HOW THE GRID LINE WORKS BECAUSE AT THIS POINT THE GRID HASN'T BEEN MADE. I NEED TO MAKE A BLANK FAKE GRID,
-                                        // PLAYER PICKS TILE THEN REAL BOARD CREATED AND BOMB CREATION AVOIDS THOSE 9 TOUCHING TILES.
+    private void pickStartingTile() {
+        int totalBombs = ScannerInputs.CheckDifficulty(size);
+        displayGrid();
         int[] pos = new int[2];
         pos = ScannerInputs.CheckInput(pos);
+        placeBombs(totalBombs, pos);
+        buildGrid();
         grid[pos[0]][pos[1]].Reveal(this, pos);
+        displayGrid();
     }
 
-    public void placeBombs() {
+    public void placeBombs(int totalBombs, int[] startingPos) {
         int bombs = 0;
-        int totalBombs = ScannerInputs.CheckDifficulty(size);
         while(bombs != totalBombs)
         {
             Random random = new Random();
             int i = random.nextInt(size);
             int j = random.nextInt(size);
+            if (i == startingPos[0] && j == startingPos[1] || i == startingPos[0]-1 && j == startingPos[1] || i == startingPos[0]+1 && j == startingPos[1] || i == startingPos[0] && j == startingPos[1]+1 || i == startingPos[0] && j == startingPos[1]-1
+                    || i == startingPos[0]-1 && j == startingPos[1]-1 || i == startingPos[0]-1 && j == startingPos[1]+1 || i == startingPos[0]+1 && j == startingPos[1]+1 || i == startingPos[0]+1 && j == startingPos[1]-1){
+                continue;
+            }
             BombTile bt = new BombTile();
             bt.SetValue("B");
             grid[i][j] = bt;
@@ -194,12 +199,22 @@ public class Map {
         grid[pos[0]][pos[1]].Reveal(this, pos);
     }
 
-    public Tile[][] GetGrid(){
+    public Tile[][] getGrid(){
         return grid;
     }
 
     private void completeGame() {
     }
-    private void failedGame() {
+    public void failedGame() {
+        for (int i = 0; i < grid.length; i++) {
+            for (int j = 0; j < grid[i].length; j++) {
+                int[] pos = new int[2];
+                pos[0] = i;
+                pos[1] = j;
+                grid[i][j].Reveal(this, pos);
+            }
+        }
+        displayGrid();
+        System.out.println("You lost");
     }
 }

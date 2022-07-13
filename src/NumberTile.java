@@ -14,11 +14,11 @@ public class NumberTile extends Tile {
     void ResultOfReveal(Map game, int[] pos) {
         // check to see if there are any places that is definitely clear, so they get revealed automatically
         if (value.equals("0")){
-            DFS(game.GetGrid(), pos);
+            floodFillDFS(game.getGrid(), pos);
         }
     }
 
-    public void DFS(Tile[][] grid, int[] pos) {
+    public void floodFillDFS(Tile[][] grid, int[] pos) {
         int h = grid.length;
         if (h == 0)
             return;
@@ -37,14 +37,15 @@ public class NumberTile extends Tile {
             int row = Integer.parseInt(x.split(",")[0]);
             int col = Integer.parseInt(x.split(",")[1]);
 
-            System.out.println("looped");
+            if(row<0 || col<0 || row>=h || col>=l || visited[row][col]) continue;
 
-            if(row<0 || col<0 || row>=h || col>=l || visited[row][col] || !grid[row][col].value.equals("0")) continue;
+            if(!grid[row][col].value.equals("0")){
+                ((NumberTile)grid[row][col]).QuickReveal();
+                continue;
+            }
 
             visited[row][col]=true;
             ((NumberTile)grid[row][col]).QuickReveal();
-
-            //if(row<=0 || col<=0 || row>=h || col>=l) continue;
 
             stack.push(row + "," + (col-1)); //go left
             stack.push(row + "," + (col+1)); //go right

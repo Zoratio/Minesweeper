@@ -9,5 +9,6 @@ public class BombTile extends Tile {
     @Override
     void ResultOfReveal(Map game, int[] pos) {
         //show solution, lost game
+        game.state = Map.gameState.FAILED;
     }
 }

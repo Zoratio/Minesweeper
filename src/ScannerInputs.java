@@ -10,15 +10,15 @@ public class ScannerInputs {
     static public int CheckDifficulty(int size){
         System.out.println("Please pick the difficulty number you want:\n - 1: Easy\n - 2: Medium\n - 3: Hard");
         int difficulty = Integer.parseInt((myScanner.nextLine()));
-        int bombCount = size * difficulty / 2;
+        int bombCount = size * difficulty;
         return bombCount;
     }
     static public int[] CheckInput(int[] pos){
-        System.out.print("Please input the row coordinates of your next input:");
+        System.out.print("Please input the row coordinates of your input:");
         pos[0] = Integer.parseInt(myScanner.nextLine());
         //CHECK IF VALID
 
-        System.out.print("Please input the column coordinates of your next input:");
+        System.out.print("Please input the column coordinates of your input:");
         pos[1] = Integer.parseInt(myScanner.nextLine());
         //CHECK IF VALID
 
