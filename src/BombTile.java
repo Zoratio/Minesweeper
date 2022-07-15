@@ -7,6 +7,11 @@ public class BombTile extends Tile {
     }
 
     @Override
+    void Flag(Map game, int[] pos) {
+        flagged = true;
+    }
+
+    @Override
     void ResultOfReveal(Map game, int[] pos) {
         //show solution, lost game
         game.state = Map.gameState.FAILED;

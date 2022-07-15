@@ -11,6 +11,11 @@ public class NumberTile extends Tile {
     }
 
     @Override
+    void Flag(Map game, int[] pos) {
+        flagged = true;
+    }
+
+    @Override
     void ResultOfReveal(Map game, int[] pos) {
         // check to see if there are any places that is definitely clear, so they get revealed automatically
         if (value.equals("0")){

@@ -1,7 +1,6 @@
 import java.util.Random;
 /*
 ToDo
-- Input a reveal or flag
 - Input validation
 */
 
@@ -17,6 +16,7 @@ public class Map {
 
     final private Tile[][] grid;
     final private int size;
+    private int totalBombs;
 
     public enum gameState {INCOMPLETE, COMPLETE, FAILED}
     public gameState state = gameState.INCOMPLETE;
@@ -36,9 +36,9 @@ public class Map {
     }
 
     private void pickStartingTile() {
-        int totalBombs = ScannerInputs.CheckDifficulty(size);
+        totalBombs = ScannerInputs.CheckDifficulty(size);
         displayGrid();
-        int[] pos = new int[2];
+        int[] pos = new int[3];
         pos = ScannerInputs.CheckInput(pos);
         placeBombs(totalBombs, pos);
         buildGrid();
@@ -116,28 +116,39 @@ public class Map {
 
     public void displayGrid() {
 
-        boolean solved = true;
+        int solved = 0;
         System.out.print("\t ");
         for(int i=0; i<size; i++)
         {
-            System.out.print(" " + i + "  ");
+            if (i >9 ){
+                System.out.print(" " + i + " ");
+            }
+            else{
+                System.out.print(" " + i + "  ");
+
+            }
         }
         System.out.print("\n");
         for(int i=0; i<size; i++)
         {
             System.out.print(i + "\t| ");
+
             for(int j=0; j<size; j++)
             {
                 if(grid[i][j] instanceof BombTile){
                     if ((grid[i][j]).GetRevealed()){
                         System.out.print((grid[i][j]).GetValue());
                     }
-                    else{
+                    else if ((grid[i][j]).GetFlagged()){
                         System.out.print("?");
+                    }
+                    else{
+                        System.out.print("#");
                     }
                 }
                 else{
                     if ((grid[i][j]).GetRevealed()){
+                        solved++;
                         switch ((grid[i][j]).GetValue()){
                             case "0":
                                 System.out.print(" ");
@@ -166,16 +177,18 @@ public class Map {
                         }
 
                     }
-                    else{
+                    else if ((grid[i][j]).GetFlagged()){
                         System.out.print("?");
-                        solved = false;
+                    }
+                    else{
+                        System.out.print("#");
                     }
                 }
                 System.out.print(" | ");
             }
             System.out.print("\n");
         }
-        if (solved){
+        if (solved == size*size-totalBombs){
             state = gameState.COMPLETE;
         }
     }
@@ -194,9 +207,15 @@ public class Map {
     }
 
     private void inputPosition() {
-        int[] pos = new int[2];
+        int[] pos = new int[3];
         pos = ScannerInputs.CheckInput(pos);
-        grid[pos[0]][pos[1]].Reveal(this, pos);
+        if (pos[2] == 1){
+            grid[pos[0]][pos[1]].Flag(this, pos);
+        }
+        else{
+            grid[pos[0]][pos[1]].Reveal(this, pos);
+        }
+
     }
 
     public Tile[][] getGrid(){
@@ -204,6 +223,7 @@ public class Map {
     }
 
     private void completeGame() {
+        System.out.println("You win");
     }
     public void failedGame() {
         for (int i = 0; i < grid.length; i++) {
